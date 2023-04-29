@@ -61,6 +61,12 @@ With the raw texts generated, we can now generate metadata about the various tex
 
 Now, with all of the raw files generated, you should now be able to generate plots with the `tmp_plot.py` script.
 
+## Example Usage
+
+Here is a plot of the usage of the word فلسفة(philosophy) over time in the corpus (x-axis is the Hijri year, y-axis is relative frequency in percentage)
+
+![Plot](https://media.discordapp.net/attachments/1071538260158988358/1101707791808352286/plt.png)
+
 
 ## TODO
  - clean corpus?
