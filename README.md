@@ -60,3 +60,10 @@ With the raw texts generated, we can now generate metadata about the various tex
 
 
 Now, with all of the raw files generated, you should now be able to generate plots with the `tmp_plot.py` script.
+
+
+## TODO
+ - clean corpus?
+ - add plotting by tag
+ - make a web interface
+
