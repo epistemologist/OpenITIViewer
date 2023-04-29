@@ -1,0 +1,6 @@
+__pycache__/
+venv/*
+gen_data/openiti_md_files/*
+openiti_raw/*
+texts_info.pkl
+gen_data/openiti_data/*
