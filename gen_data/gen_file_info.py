@@ -1,15 +1,18 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 from dataclasses import dataclass
 from typing import *
 from tqdm import tqdm
 from glob import glob
 import pickle, re, csv, os
+from multiprocessing import cpu_count
 from concurrent.futures import ProcessPoolExecutor
 
 metadata = dict()
 
-with open("./openiti_data/metadata/OpenITI_metadata_2022-1-6_merged.csv", "r") as metadata_file:
+PATH = "openiti_data/metadata/OpenITI_metadata_2022-2-7_merged.csv"
+
+with open(f"./{PATH}", "r") as metadata_file:
 	metadata_raw = list(csv.reader(metadata_file, delimiter = '\t'))
 	fields, metadata_raw = metadata_raw[0], metadata_raw[1:]
 	for tmp in metadata_raw:
@@ -43,7 +46,7 @@ def get_text_info(item):
 		"word_count": get_word_count(filename)
 	}
 
-with ProcessPoolExecutor(max_workers=8) as executor:
+with ProcessPoolExecutor(max_workers=cpu_count()) as executor:
 	texts = executor.map(get_text_info, 
 		tqdm(enumerate(sorted([
 			f for f in glob("./openiti_md_files/*") if os.path.isfile(f)

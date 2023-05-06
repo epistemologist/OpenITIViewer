@@ -1,7 +1,8 @@
-#!/bin/python3
+#!/usr/bin/env python
 
 import re
 import concurrent.futures
+from multiprocessing import cpu_counbt
 from glob import glob
 
 END_OF_META_HEADER = "#META#Header#End#\n"
@@ -55,5 +56,5 @@ def parse_file(filename):
 	TOTAL_FILES += 1
 
 
-with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+with concurrent.futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
 	executor.map(parse_file, glob("openiti_md_files/*"))

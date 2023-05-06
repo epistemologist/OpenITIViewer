@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import *
+from multiprocessing import cpu_count
 import pickle
 
 @dataclass
@@ -24,4 +25,4 @@ class Match:
         return f"{self.preview_before} **{self.matched_text}** {self.preview_after}"
 
 all_texts = [Text(**t) for t in pickle.load(open("./texts_info.pkl", 'rb'))]
-texts_by_filename = {text.filename: text for text in all_texts}
+texts_by_filename = {text.filename: text for text in all_texts} 

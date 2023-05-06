@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 from pathlib import Path
 from tqdm import tqdm
 import re, os
 
-PATH = "./openiti_data/OpenITI-data_2022-1-6"
+PATH = "./openiti_data/RELEASE/data"
 
 os.system("mkdir ./openiti_md_files")
 
