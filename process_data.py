@@ -36,5 +36,5 @@ def get_tag_distribution(
     return sorted(list(tag_dist.items()), key = lambda i: i[1], reverse = True)
 
 import pickle
-matches =pickle.load(open("matches.pkl", 'rb'))
+matches = pickle.load(open("matches.pkl", 'rb'))
 

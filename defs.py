@@ -12,6 +12,8 @@ class Text:
     date: int
     tags: Set[str]
     word_count: int
+    unique_work_identifier: str
+    is_primary: bool
 
     def __post_init__(self):
         self.tags = { i for i in self.tags if i }
@@ -31,4 +33,5 @@ class Match:
         return f"{self.preview_before} **{self.matched_text}** {self.preview_after}"
 
 all_texts = [Text(**t) for t in pickle.load(open("./texts_info.pkl", 'rb'))]
+all_primary_texts = [t for t in all_texts if t.is_primary]
 texts_by_filename = {text.filename: text for text in all_texts} 

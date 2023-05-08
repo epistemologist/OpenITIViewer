@@ -43,7 +43,9 @@ def get_text_info(item):
 		"title": file_metadata["title_lat"],
 		"date": int(file_metadata["date"]),
 		"tags": {i.strip() for i in file_metadata["tags"].split("::") if i},
-		"word_count": get_word_count(filename)
+		"word_count": get_word_count(filename),
+        "unique_work_identifier": ".".join(filename.split(".")[:2]),
+        "is_primary": file_metadata["status"] == "pri"
 	}
 
 with ProcessPoolExecutor(max_workers=cpu_count()) as executor:

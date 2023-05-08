@@ -6,12 +6,18 @@ from glob import glob
 from tqdm import tqdm
 from multiprocessing import cpu_count
 
-from defs import Text, Match, all_texts, texts_by_filename
+from defs import Text, Match, all_texts, all_primary_texts, texts_by_filename
 
 @dataclass
 class SearchOptions:
     insert_space: bool
+    only_primary_version: bool
+
+
     #TODO: Add more features here? (e.g. pronoun suffixes, verb conjugation, etc) 
+
+    def __post_init__(self):
+        return
 
     def gen_regex(self, queries: List[str]) -> str:
         SPACE_REGEX = "[ ]" if self.insert_space else "[ ]?"
@@ -54,7 +60,10 @@ def _worker(args):
 
 def search_all_files(
     query, 
-    search_options = SearchOptions(True), 
+    search_options = SearchOptions(
+        insert_space = True,
+        only_primary_version = False
+    ), 
     chars_before=None, 
     chars_after=None,
     verbose=True
@@ -68,10 +77,12 @@ def search_all_files(
             "chars_before": chars_before,
             "chars_after": chars_after
         }
+
+    filenames = [f"./openiti_raw/{text.filename}.raw" for text in (all_texts if not search_options.only_primary_version else all_primary_texts)]
     if verbose:
-        pbar = tqdm(total=len(glob("./openiti_raw/*")))
+        pbar = tqdm(total=len(filenames))
     with ProcessPoolExecutor(max_workers=cpu_count()) as executor:
-        for matches in executor.map(_worker, [_construct_args(filename) for filename in glob("./openiti_raw/*") ]):
+        for matches in executor.map(_worker, [_construct_args(filename) for filename in filenames ]):
             all_matches.extend(matches)
             if verbose:
                 pbar.update(1)

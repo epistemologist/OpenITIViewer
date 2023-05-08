@@ -6,3 +6,4 @@ texts_info.pkl
 gen_data/openiti_data/*
 matches.pkl
 *.swp
+*.zpaq
