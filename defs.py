@@ -10,8 +10,14 @@ class Text:
     author: str
     title: str
     date: int
-    tags: List[str]
+    tags: Set[str]
     word_count: int
+
+    def __post_init__(self):
+        self.tags = { i for i in self.tags if i }
+
+    def __hash__(self):
+        return hash(self.idx)
 
 @dataclass
 class Match:

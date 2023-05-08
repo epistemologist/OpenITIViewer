@@ -2,70 +2,70 @@
 
 The beginnings of an n-gram viewer for the [OpenITI corpus](https://zenodo.org/record/7687795)
 
-## Build Instructions (TODO: Automate this)
-
-**NOTE**: This takes up around 41 gigabytes of space! Keep this in mind.
-
-### Download corpus
-We can download the corpus with the `zenodo-get` library:
+## Download Data
 
 ```sh
-epistemologist@DESKTOP-MQI56O4:~/openiti$ zenodo_get 10.5281/zenodo.3082463
-Title: OpenITI: a Machine-Readable Corpus of Islamicate Texts
-Keywords: Arabic; Classical Arabic; Corpus
-Publication date: 2022-07-08
-DOI: 10.5281/zenodo.6808108
-Total size: 5421.5 MB
-
-Link: https://zenodo.org/api/files/20cd5499-2b97-4c26-8332-b1b7e6b5398b/data.zip   size: 5418.9 MB
-100% [....................................................................] 5682081736 / 5682081736
-Checksum is correct. (4fb22a30807a301564c76ea6a0a7d883)
-
-Link: https://zenodo.org/api/files/20cd5499-2b97-4c26-8332-b1b7e6b5398b/metadata.zip   size: 2.5 MB
-100% [..........................................................................] 2633542 / 2633542
-Checksum is correct. (54090d3fbc3a730cfe5480146f122f5d)
-
-Link: https://zenodo.org/api/files/20cd5499-2b97-4c26-8332-b1b7e6b5398b/release_notes.zip   size: 0.1 MB
-100% [............................................................................] 107070 / 107070
-Checksum is correct. (beb03ef40b6864ab9b2507f2a13942b5)
-All files have been downloaded.
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_data$ zenodo_get 10.5281/zenodo.7687795
+[[ ... ]]
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_data$ cat md5sums.txt 
+9ff72190f7a94878834c131326d4f0b4  data.zip
+39376415fea35e52cabd9292a202fcee  metadata.zip
+02df73ee30a631da57c6d3d08fa9c9c7  release_notes.zip
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_data$ md5sum *.zip
+9ff72190f7a94878834c131326d4f0b4  data.zip
+39376415fea35e52cabd9292a202fcee  metadata.zip
+02df73ee30a631da57c6d3d08fa9c9c7  release_notes.zip
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_data$ find *.zip | xargs -I {} unzip {}
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_data/RELEASE/data$ find | wc -l
+56097
 ```
 
-### Get raw Arabic files
-Note that in the corpus we download, there are a mix of markdown files, the actual files of the various Arabic books, and various other files. To filter out just the raw Arabic documents, we use the `get_markdown_files.py` script to copy these files to `./openiti_md_files`
+## Get Markdown Files
+```
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data$ time ./get_markdown_files.py 
+56096it [03:18, 283.12it/s] 
 
-### Cleaning up corpus
+real    3m18.231s
+user    0m25.471s
+sys     0m36.555s
+```
 
-Note that one of the markdown files does not contain a proper header, so we add it
-```sh
-$ grep -RL "#META#Header#End#"
-0460ShaykhTusi.Rijal.Shia002935-ara1.mARkdown
-$ diff 0460ShaykhTusi.Rijal.Shia002935-ara1.mARkdown.old openiti_md_files/0460ShaykhTusi.Rijal.Shia002935-ara1.mARkdown
-37c37
-< 
+## Patch some of the headers
+```
+$ diff openiti_data/RELEASE/data/1400IbnSuda/1400IbnSuda.IthafMatalic/1400IbnSuda.IthafMatalic.Sham30K0046642-ara1.completed openiti_md_files/1400IbnSuda.IthafMatalic.Sham30K0046642-ara1.completed 
+71c71
+< #META#Header#End
 ---
 > #META#Header#End#
-13283c13283
-< PageV00P452
+18109c18109
+< ~~نقول وكيل. PageV02P0642
 \ No newline at end of file
 ---
-> PageV00P452
+> ~~نقول وكيل. PageV02P0642
+ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_d
 ```
 
-### Tokenize Documents
-Next, to get only the raw tokens from each of the markdown files, run `./gen_raw_tokens.py`, which will generate corresponding `.raw` files in the `openiti_raw` directory (took about 6 minutes on a machine with 8 cores)
 
-### Generating File Metadata
-With the raw texts generated, we can now generate metadata about the various texts that we want to search through by running `./gen_file_info.py` (around 1 minute to run)
+## Generate Raw Files
+```
+$ time ./gen_raw_tokens.py
+real    16m9.978s
+user    28m51.892s
+sys     2m53.632s
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_raw$ find . | wc -l
+11301
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data/openiti_raw$ du -sh .
+20G     .
+```
 
-
-Now, with all of the raw files generated, you should now be able to generate plots with the `tmp_plot.py` script.
-
-## Example Usage
-
-Here is a plot of the usage of the word فلسفة(philosophy) over time in the corpus (x-axis is the Hijri year, y-axis is relative frequency in percentage)
-
-![Plot](https://media.discordapp.net/attachments/1071538260158988358/1101707791808352286/plt.png)
+## Generate File Metadata Information
+```
+(venv) ubuntu@ip-172-31-28-130:~/OpenITIViewer/gen_data$ time ./gen_file_info.py
+[[ ... ]] 
+real    3m8.464s
+user    4m11.552s
+sys     1m51.397s
+```
 
 
 ## TODO

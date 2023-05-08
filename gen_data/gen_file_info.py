@@ -42,7 +42,7 @@ def get_text_info(item):
 		"author": file_metadata["author_lat_full_name"],
 		"title": file_metadata["title_lat"],
 		"date": int(file_metadata["date"]),
-		"tags": [i.strip() for i in file_metadata["tags"].split("::")],
+		"tags": {i.strip() for i in file_metadata["tags"].split("::") if i},
 		"word_count": get_word_count(filename)
 	}
 
