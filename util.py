@@ -1,5 +1,3 @@
-#!/bin/python3
-
 translit_table = {
 	'،'   : ',',
 # letters

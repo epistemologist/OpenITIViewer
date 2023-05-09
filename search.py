@@ -6,7 +6,11 @@ from glob import glob
 from tqdm import tqdm
 from multiprocessing import cpu_count
 
+from random import seed, sample
+
 from defs import Text, Match, all_texts, all_primary_texts, texts_by_filename
+
+seed(42)
 
 @dataclass
 class SearchOptions:
@@ -35,6 +39,7 @@ def search_file(
     if chars_before is None or chars_after is None:
         chars_before = chars_after = max(100, len("".join(query))//3)
     search_regex = search_options.gen_regex(query)
+    print(f"search_regex: {repr(search_regex)}")
     doc_text = open(filename, 'r').read()
     matches = []
     for res in re.finditer(search_regex, doc_text):
@@ -82,8 +87,11 @@ def search_all_files(
     if verbose:
         pbar = tqdm(total=len(filenames))
     with ProcessPoolExecutor(max_workers=cpu_count()) as executor:
-        for matches in executor.map(_worker, [_construct_args(filename) for filename in filenames ]):
+        for matches in executor.map(_worker, [_construct_args(filename) for filename in sample(filenames, len(filenames)) ]):
             all_matches.extend(matches)
             if verbose:
                 pbar.update(1)
     return all_matches
+
+matches = search_all_files(["حدثنا"])
+print(len(matches))
