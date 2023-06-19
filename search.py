@@ -9,6 +9,7 @@ from multiprocessing import cpu_count
 from random import seed, sample
 
 from defs import Text, Match, all_texts, all_primary_texts, texts_by_filename
+from util import transliterate_arabic, untransliterate_arabic
 
 seed(42)
 
@@ -24,6 +25,7 @@ class SearchOptions:
         return
 
     def gen_regex(self, queries: List[str]) -> str:
+        queries = [transliterate_arabic(i) for i in queries]
         SPACE_REGEX = "[ ]" if self.insert_space else "[ ]?"
         query_regexes = []
         for query in queries:
@@ -39,15 +41,14 @@ def search_file(
     if chars_before is None or chars_after is None:
         chars_before = chars_after = max(100, len("".join(query))//3)
     search_regex = search_options.gen_regex(query)
-    print(f"search_regex: {repr(search_regex)}")
     doc_text = open(filename, 'r').read()
     matches = []
     for res in re.finditer(search_regex, doc_text):
         matches.append(Match(
-            matched_text = doc_text[res.start(): res.end()],
+            matched_text = untransliterate_arabic(doc_text[res.start(): res.end()]),
             match_loc = (res.start(), res.end()),
-            preview_before = doc_text[res.start()-chars_before:res.start()],
-            preview_after = doc_text[res.end():res.end()+chars_after],
+            preview_before = untransliterate_arabic(doc_text[res.start()-chars_before:res.start()]),
+            preview_after = untransliterate_arabic(doc_text[res.end():res.end()+chars_after]),
             text = texts_by_filename[filename.split("/")[-1].removesuffix(".raw")]
         ))
     return matches
@@ -93,5 +94,3 @@ def search_all_files(
                 pbar.update(1)
     return all_matches
 
-matches = search_all_files(["حدثنا"])
-print(len(matches))

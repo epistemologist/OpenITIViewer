@@ -11,7 +11,6 @@ for _ in range(1):
     matches = search_all_files(query)
     print(f"{len(matches)} matches")
 
-
     data = get_normalized_freq_over_time(matches, INTERVAL_LEN)
     print(data)
     X = data.keys(); Y = data.values()
