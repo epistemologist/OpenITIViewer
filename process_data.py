@@ -35,6 +35,4 @@ def get_tag_distribution(
     tag_dist = {tag: sum([tag in text.tags for text in all_texts]) for tag in all_tags}
     return sorted(list(tag_dist.items()), key = lambda i: i[1], reverse = True)
 
-import pickle
-matches = pickle.load(open("matches.pkl", 'rb'))
 

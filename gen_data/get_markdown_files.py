@@ -3,7 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 import re, os
 
-PATH = "./openiti_data/RELEASE/data"
+PATH = "./openiti_data/"
 
 os.system("mkdir ./openiti_md_files")
 

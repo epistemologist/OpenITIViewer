@@ -10,7 +10,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 metadata = dict()
 
-PATH = "openiti_data/metadata/OpenITI_metadata_2022-2-7_merged.csv"
+PATH = "openiti_data/OpenITI_metadata_2023-1-8.csv"
 
 with open(f"./{PATH}", "r") as metadata_file:
 	metadata_raw = list(csv.reader(metadata_file, delimiter = '\t'))
