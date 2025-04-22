@@ -2,6 +2,9 @@
 
 The beginnings of an n-gram viewer for the [OpenITI corpus](https://zenodo.org/record/7687795)
 
+## Current Status
+At present, the viewer only works if you have a copy of the corpus locally (which is around 33 GB); we detail how to get it below:
+
 ## Download Data
 
 ```sh
@@ -66,6 +69,12 @@ real    3m8.464s
 user    4m11.552s
 sys     1m51.397s
 ```
+
+Now you should be able to run `python3 server.py` and the following webpage should come up:
+![image](https://github.com/user-attachments/assets/2ef059fe-3a52-4c0f-8ff7-3c5cf0410e71)
+
+We can plot the frequency of various terms, e.g. the Arabic word for the emperor Heraclius:
+![image](https://github.com/user-attachments/assets/fa072522-0e6e-41f1-8d1d-bfb8d55287cd)
 
 
 ## TODO
