@@ -71,5 +71,7 @@ sys     1m51.397s
 ## TODO
  - clean corpus?
  - add plotting by tag
- - make a web interface
-
+ - search method right now is messy, add different ways of searching
+ 	- exact match
+	- match with spaces
+	- levenstein distance for fuzzy matches?
